@@ -1,31 +1,158 @@
-
-% Language and fonts
+% ---------------------------------------------------------------
+% Language and fonts (compile with XeLaTeX)
+% ---------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{thai}
 \setotherlanguage{english}
 
-\newfontfamily\thaifont[Script=Thai]{Garuda}
-\newfontfamily\englishfont{Latin Modern Roman}
+% Thai: Laksaman (TH Sarabun-style) reads well for long passages.
+% English: TeX Gyre Pagella sits nicely next to it in weight and x-height.
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\newfontfamily\englishfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\newfontfamily\thaifont[Script=Thai,Scale=1.2]{Laksaman}
+\newfontfamily\headingfont[Script=Thai,Scale=1.15]{Kinnari}
 
+% Thai line breaking
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+% ---------------------------------------------------------------
 % Page layout
-\usepackage[margin=2.5cm]{geometry}
+% ---------------------------------------------------------------
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm,
+  headheight=15pt]{geometry}
+% Thai needs extra leading so stacked vowels and tone marks
+% do not collide with the line above.
+\newcommand{\thaistretch}{1.6}
+\linespread{\thaistretch}
 
-% Paragraph formatting
-\usepackage{indentfirst}
-\setlength{\parindent}{0pt}
-\setlength{\leftskip}{2em}
-\setlength{\parskip}{0.3em}
+% Paragraph formatting: no indent, a bit of space between paragraphs
+\usepackage[skip=0.6em plus 2pt]{parskip}
+
+% ---------------------------------------------------------------
+% Colours
+% ---------------------------------------------------------------
+\usepackage[dvipsnames]{xcolor}
+\definecolor{seed}{HTML}{2E6B4F}      % deep green: headings, accents
+\definecolor{seedlight}{HTML}{EEF5F0} % quote background
+\definecolor{bark}{HTML}{8A5A2B}      % warm brown: notes
+\definecolor{barklight}{HTML}{FBF5EC} % note background
+\definecolor{inkgray}{HTML}{555555}
+
+% ---------------------------------------------------------------
 % Mathematics and graphics
+% ---------------------------------------------------------------
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 
+% ---------------------------------------------------------------
+% Section headings
+% ---------------------------------------------------------------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\headingfont\LARGE\bfseries\color{seed}}
+  {\thesection}{0.8em}{}
+  [{\color{seed}\titlerule[0.8pt]}]
+\titleformat{\subsection}
+  {\headingfont\Large\bfseries\color{seed}}
+  {\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}
+  {\headingfont\large\bfseries\color{inkgray}}
+  {\thesubsubsection}{0.8em}{}
+\titlespacing*{\section}{0pt}{1.5em}{1em}
+\titlespacing*{\subsection}{0pt}{1.6em}{0.6em}
+\titlespacing*{\subsubsection}{0pt}{1.2em}{0.4em}
 
-\newenvironment{indentedtext}
-  {\begin{list}{}{
-    \setlength{\leftmargin}{2em}
-    \setlength{\rightmargin}{0pt}
-    \setlength{\listparindent}{0pt}
-    \setlength{\parsep}{0.3em}
-  }\item[]}
-  {\end{list}}
+% ---------------------------------------------------------------
+% Lists
+% ---------------------------------------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=0.25em,topsep=0.4em}
+\setlist[itemize,1]{label={\color{seed}\textbullet}}
+\setlist[itemize,2]{label={\color{seed}\textendash}}
+
+% ---------------------------------------------------------------
+% Header and footer
+% ---------------------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{inkgray}\englishfont\itshape The World with a Seed}
+\fancyhead[R]{\small\color{inkgray}\nouppercase{\leftmark}}
+\fancyfoot[C]{\small\color{inkgray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{{\color{seed!40}\hrule width\headwidth height\headrulewidth}}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\small\color{inkgray}\thepage}}
+
+% ---------------------------------------------------------------
+% Boxes
+% ---------------------------------------------------------------
+\usepackage[most]{tcolorbox}
+
+% Quotation from a book, with the source shown at the bottom right.
+%   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
+\newtcolorbox{bookquote}[1]{
+  enhanced, breakable,
+  colback=seedlight, colframe=seed,
+  boxrule=0pt, leftrule=3pt, arc=0pt, outer arc=0pt,
+  left=10pt, right=10pt, top=6pt, bottom=6pt,
+  before skip=0.8em, after skip=0.8em,
+  fontupper=\linespread{\thaistretch}\selectfont\itshape,
+  parbox=false,
+  after upper={\par\smallskip\hfill{\upshape\small\color{seed}--- จาก #1}},
+}
+
+% Personal commentary / observation.
+%   \begin{note}[หัวข้อ] ... \end{note}
+\newtcolorbox{note}[1][ข้อสังเกตของผม]{
+  enhanced, breakable,
+  colback=barklight, colframe=bark,
+  boxrule=0.6pt, arc=2pt,
+  left=10pt, right=10pt, top=6pt, bottom=6pt,
+  before skip=0.8em, after skip=0.8em,
+  parbox=false,
+  fontupper=\linespread{\thaistretch}\selectfont,
+  title={\headingfont\bfseries #1},
+  coltitle=white, colbacktitle=bark,
+  attach boxed title to top left={xshift=8pt,yshift=-2mm},
+  boxed title style={arc=2pt,boxrule=0pt},
+}
+
+% Placeholder for sections that are not written yet.
+\newcommand{\todo}[1][ยังไม่ได้เขียน]{%
+  {\color{inkgray}\itshape [#1]}}
+
+% ---------------------------------------------------------------
+% Title page
+% ---------------------------------------------------------------
+\makeatletter
+\renewcommand{\maketitle}{%
+  \begin{titlepage}
+    \centering
+    \vspace*{0.25\textheight}
+    {\color{seed}\rule{0.5\textwidth}{1pt}\par}
+    \vspace{1.5em}
+    {\englishfont\fontsize{30}{36}\selectfont\color{seed}\@title\par}
+    \vspace{1em}
+    {\color{seed}\rule{0.5\textwidth}{1pt}\par}
+    \vspace{3em}
+    {\englishfont\Large\@author\par}
+    \vspace{0.6em}
+    {\englishfont\large\color{inkgray}\@date\par}
+    \vfill
+  \end{titlepage}
+}
+\makeatother
+
+% ---------------------------------------------------------------
+% Links (load last)
+% ---------------------------------------------------------------
+\usepackage[hidelinks]{hyperref}

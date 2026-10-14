@@ -1,0 +1,15 @@
+services:
+  # One-off build: docker compose run --rm pdf
+  pdf:
+    build: .
+    image: the-world-with-a-seed-latex
+    volumes:
+      - .:/work
+
+  # Rebuild on every save: docker compose up watch
+  watch:
+    image: the-world-with-a-seed-latex
+    build: .
+    volumes:
+      - .:/work
+    command: ["latexmk", "-pvc", "-view=none", "main.tex"]
