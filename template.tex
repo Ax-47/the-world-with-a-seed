@@ -94,24 +94,15 @@
 % Quotation from a book: indented block, upright text (italic Thai is hard
 % to read), source on its own line at the right.
 %   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
-% The whole quote is built in a box first so it moves to the next page as
-% one piece instead of being split; a quote taller than a page still breaks.
-\newsavebox\bookquotebox
+% A long quote may continue on the next page between its paragraphs, but a
+% paragraph itself is never split (see \interlinepenalty above).
 \newenvironment{bookquote}[1]
-  {\def\bookquotesource{#1}\par
-   \setbox\bookquotebox\vbox\bgroup
+  {\def\bookquotesource{#1}%
    \begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\rightmargin}{2.5em}%
      \setlength{\listparindent}{0pt}\setlength{\parsep}{0.8em}%
      \setlength{\topsep}{1em}}%
    \item\relax\setlength{\RaggedRightParindent}{0pt}\RaggedRight\small\linespread{\thaistretch}\selectfont}
-  {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}%
-   \egroup
-   \ifdim\dimexpr\ht\bookquotebox+\dp\bookquotebox\relax>\textheight
-     \unvbox\bookquotebox
-   \else
-     \box\bookquotebox
-   \fi
-   \par}
+  {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}}
 
 % Personal commentary.
 %   \begin{note}[หัวข้อ] ... \end{note}
