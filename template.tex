@@ -21,8 +21,7 @@
 
 % Thai line breaking
 \XeTeXlinebreaklocale "th"
-\XeTeXlinebreakskip = 0pt plus 0.5pt
-\setlength{\emergencystretch}{2em}
+\XeTeXlinebreakskip = 0pt
 % Allow a line break where Thai runs straight into Latin letters or digits
 % (e.g. "แต่Aristotle"), which ICU does not treat as a break point
 \XeTeXinterchartokenstate=1
@@ -59,7 +58,15 @@
 \let\nofrench@indent\french@indent
 \makeatother
 \setlength{\parindent}{1.5cm}
-\setlength{\parskip}{0.3em}
+\setlength{\parskip}{0.8em}
+
+% Left-aligned (ragged right): justified Thai stretches the space between
+% letters, which is harder to read
+\usepackage{ragged2e}
+\setlength{\RaggedRightParindent}{\parindent}
+\setlength{\RaggedRightParfillskip}{0pt plus 1fil}
+\setlength{\RaggedRightRightskip}{0pt plus 1fil}
+\AtBeginDocument{\RaggedRight}
 
 % ---------------------------------------------------------------
 % Mathematics and graphics
@@ -79,13 +86,15 @@
 % ---------------------------------------------------------------
 % Quotes and notes
 % ---------------------------------------------------------------
-% Quotation from a book, with the source on its own line at the right.
+% Quotation from a book: indented block, upright text (italic Thai is hard
+% to read), source on its own line at the right.
 %   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
 \newenvironment{bookquote}[1]
   {\def\bookquotesource{#1}%
    \begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\rightmargin}{2.5em}%
-     \setlength{\listparindent}{1.5cm}\setlength{\parsep}{0.3em}}%
-   \item\relax\linespread{\thaistretch}\selectfont\itshape}
+     \setlength{\listparindent}{0pt}\setlength{\parsep}{0.8em}%
+     \setlength{\topsep}{1em}}%
+   \item\relax\setlength{\RaggedRightParindent}{0pt}\RaggedRight\small\linespread{\thaistretch}\selectfont}
   {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}}
 
 % Personal commentary.
