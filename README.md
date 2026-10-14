@@ -27,10 +27,10 @@ latexmk main.tex
 ## Layout
 
 - `main.tex` — document entry point
-- `template.tex` — fonts, page layout, headings, and the `bookquote` / `note` boxes
+- `template.tex` — fonts, page layout, and the `bookquote` / `note` environments
 - `chapters/` — content
 
-### Boxes
+### Quotes and notes
 
 ```latex
 \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22}
