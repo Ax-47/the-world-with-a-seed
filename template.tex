@@ -60,9 +60,11 @@
 \setlength{\parindent}{1.5cm}
 \setlength{\parskip}{0.8em}
 
-% Never split a paragraph across pages: move the whole paragraph to the next
-% page instead, and leave the leftover space at the bottom of the page
-\interlinepenalty=10000
+% Page breaks inside a paragraph must leave at least 3 lines on each page.
+% A paragraph of up to 6 lines therefore never splits and moves to the next
+% page whole; a longer one may continue on the next page.
+\clubpenalties 4 10000 10000 10000 0
+\widowpenalties 4 10000 10000 10000 0
 \raggedbottom
 
 % Left-aligned (ragged right): justified Thai stretches the space between
@@ -95,7 +97,7 @@
 % to read), source on its own line at the right.
 %   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
 % A long quote may continue on the next page between its paragraphs, but a
-% paragraph itself is never split (see \interlinepenalty above).
+% short paragraph is never split (see \clubpenalties above).
 \newenvironment{bookquote}[1]
   {\def\bookquotesource{#1}%
    \begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\rightmargin}{2.5em}%
@@ -114,4 +116,5 @@
 % Links (load last)
 % ---------------------------------------------------------------
 \usepackage[hidelinks]{hyperref}
+\urlstyle{same}  % links in the body font (the default mono font has no Thai)
 \usepackage{tikz-cd}
