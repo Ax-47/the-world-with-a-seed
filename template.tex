@@ -1,0 +1,31 @@
+
+% Language and fonts
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{thai}
+\setotherlanguage{english}
+
+\newfontfamily\thaifont[Script=Thai]{Garuda}
+\newfontfamily\englishfont{Latin Modern Roman}
+
+% Page layout
+\usepackage[margin=2.5cm]{geometry}
+
+% Paragraph formatting
+\usepackage{indentfirst}
+\setlength{\parindent}{0pt}
+\setlength{\leftskip}{2em}
+\setlength{\parskip}{0.3em}
+% Mathematics and graphics
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+
+
+\newenvironment{indentedtext}
+  {\begin{list}{}{
+    \setlength{\leftmargin}{2em}
+    \setlength{\rightmargin}{0pt}
+    \setlength{\listparindent}{0pt}
+    \setlength{\parsep}{0.3em}
+  }\item[]}
+  {\end{list}}
