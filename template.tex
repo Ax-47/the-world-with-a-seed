@@ -6,7 +6,7 @@
 \setdefaultlanguage{thai}
 \setotherlanguage{english}
 
-% Thai: Laksaman (TH Sarabun-style). English: TeX Gyre Pagella.
+% Thai: Sarabun (bundled in fonts/, SIL OFL). English: TeX Gyre Pagella.
 \defaultfontfeatures{Ligatures=TeX}
 \setmainfont{texgyrepagella}[Extension=.otf,
   UprightFont=*-regular, BoldFont=*-bold,
@@ -14,11 +14,18 @@
 \newfontfamily\englishfont{texgyrepagella}[Extension=.otf,
   UprightFont=*-regular, BoldFont=*-bold,
   ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
-\newfontfamily\thaifont[Script=Thai,Scale=1.2]{Laksaman}
+\newfontfamily\thaifont{Sarabun}[Script=Thai, Scale=1.15,
+  Path=fonts/, Extension=.ttf,
+  UprightFont=*-Medium, BoldFont=*-Bold,
+  ItalicFont=*-MediumItalic, BoldItalicFont=*-BoldItalic]
 
 % Thai line breaking
 \XeTeXlinebreaklocale "th"
-\XeTeXlinebreakskip = 0pt plus 1pt
+\XeTeXlinebreakskip = 0pt plus 0.5pt
+\setlength{\emergencystretch}{1em}
+% Break Thai only between words (ICU dictionary), never by hyphenating
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 
 % ---------------------------------------------------------------
 % Page layout
