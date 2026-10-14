@@ -23,6 +23,21 @@
 \XeTeXlinebreaklocale "th"
 \XeTeXlinebreakskip = 0pt plus 0.5pt
 \setlength{\emergencystretch}{2em}
+% Allow a line break where Thai runs straight into Latin letters or digits
+% (e.g. "แต่Aristotle"), which ICU does not treat as a break point
+\XeTeXinterchartokenstate=1
+\newXeTeXintercharclass\thaicharclass
+\newXeTeXintercharclass\latincharclass
+\count255="0E01 \loop\ifnum\count255<"0E5C
+  \XeTeXcharclass\count255=\thaicharclass \advance\count255 by 1 \repeat
+\count255=`A \loop\ifnum\count255<`[
+  \XeTeXcharclass\count255=\latincharclass \advance\count255 by 1 \repeat
+\count255=`a \loop\ifnum\count255<`\{
+  \XeTeXcharclass\count255=\latincharclass \advance\count255 by 1 \repeat
+\count255=`0 \loop\ifnum\count255<`:
+  \XeTeXcharclass\count255=\latincharclass \advance\count255 by 1 \repeat
+\XeTeXinterchartoks\thaicharclass\latincharclass={\penalty50 }
+\XeTeXinterchartoks\latincharclass\thaicharclass={\penalty50 }
 % Break Thai only between words (ICU dictionary), never by hyphenating
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
@@ -50,7 +65,10 @@
 % Mathematics and graphics
 % ---------------------------------------------------------------
 \usepackage{graphicx}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath}
+% Math in TeX Gyre Pagella Math, scaled to sit next to Sarabun
+\usepackage{unicode-math}
+\setmathfont{texgyrepagella-math.otf}[Scale=1.1]
 
 % ---------------------------------------------------------------
 % Lists

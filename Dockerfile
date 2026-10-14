@@ -9,6 +9,7 @@ RUN apt-get update \
       texlive-lang-other \
       texlive-fonts-recommended \
       fonts-texgyre \
+      fonts-texgyre-math \
       fonts-tlwg-laksaman-otf \
       fonts-tlwg-kinnari-otf \
       latexmk \
