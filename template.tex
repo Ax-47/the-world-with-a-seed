@@ -60,6 +60,11 @@
 \setlength{\parindent}{1.5cm}
 \setlength{\parskip}{0.8em}
 
+% Never split a paragraph across pages: move the whole paragraph to the next
+% page instead, and leave the leftover space at the bottom of the page
+\interlinepenalty=10000
+\raggedbottom
+
 % Left-aligned (ragged right): justified Thai stretches the space between
 % letters, which is harder to read
 \usepackage{ragged2e}
@@ -89,18 +94,29 @@
 % Quotation from a book: indented block, upright text (italic Thai is hard
 % to read), source on its own line at the right.
 %   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
+% The whole quote is built in a box first so it moves to the next page as
+% one piece instead of being split; a quote taller than a page still breaks.
+\newsavebox\bookquotebox
 \newenvironment{bookquote}[1]
-  {\def\bookquotesource{#1}%
+  {\def\bookquotesource{#1}\par
+   \setbox\bookquotebox\vbox\bgroup
    \begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\rightmargin}{2.5em}%
      \setlength{\listparindent}{0pt}\setlength{\parsep}{0.8em}%
      \setlength{\topsep}{1em}}%
    \item\relax\setlength{\RaggedRightParindent}{0pt}\RaggedRight\small\linespread{\thaistretch}\selectfont}
-  {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}}
+  {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}%
+   \egroup
+   \ifdim\dimexpr\ht\bookquotebox+\dp\bookquotebox\relax>\textheight
+     \unvbox\bookquotebox
+   \else
+     \box\bookquotebox
+   \fi
+   \par}
 
 % Personal commentary.
 %   \begin{note}[หัวข้อ] ... \end{note}
 \newenvironment{note}[1][ข้อสังเกตของผม]
-  {\par\medskip\noindent\textbf{#1}\par}
+  {\par\medskip\noindent\textbf{#1}\par\nopagebreak}
   {\par\medskip}
 
 % ---------------------------------------------------------------
