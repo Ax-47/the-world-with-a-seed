@@ -1,31 +1,70 @@
-
-% Language and fonts
+% ---------------------------------------------------------------
+% Language and fonts (compile with XeLaTeX)
+% ---------------------------------------------------------------
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setdefaultlanguage{thai}
 \setotherlanguage{english}
 
-\newfontfamily\thaifont[Script=Thai]{Garuda}
-\newfontfamily\englishfont{Latin Modern Roman}
+% Thai: Laksaman (TH Sarabun-style). English: TeX Gyre Pagella.
+\defaultfontfeatures{Ligatures=TeX}
+\setmainfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\newfontfamily\englishfont{texgyrepagella}[Extension=.otf,
+  UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\newfontfamily\thaifont[Script=Thai,Scale=1.2]{Laksaman}
 
+% Thai line breaking
+\XeTeXlinebreaklocale "th"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+% ---------------------------------------------------------------
 % Page layout
-\usepackage[margin=2.5cm]{geometry}
+% ---------------------------------------------------------------
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm]{geometry}
+% Thai needs extra leading so stacked vowels and tone marks
+% do not collide with the line above.
+\newcommand{\thaistretch}{1.6}
+\linespread{\thaistretch}
 
-% Paragraph formatting
+% Paragraph formatting: indent every paragraph, including the first
 \usepackage{indentfirst}
-\setlength{\parindent}{0pt}
-\setlength{\leftskip}{2em}
+\setlength{\parindent}{2em}
 \setlength{\parskip}{0.3em}
+
+% ---------------------------------------------------------------
 % Mathematics and graphics
+% ---------------------------------------------------------------
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb}
 
+% ---------------------------------------------------------------
+% Lists
+% ---------------------------------------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=0.2em,topsep=0.3em}
 
-\newenvironment{indentedtext}
-  {\begin{list}{}{
-    \setlength{\leftmargin}{2em}
-    \setlength{\rightmargin}{0pt}
-    \setlength{\listparindent}{0pt}
-    \setlength{\parsep}{0.3em}
-  }\item[]}
-  {\end{list}}
+% ---------------------------------------------------------------
+% Quotes and notes
+% ---------------------------------------------------------------
+% Quotation from a book, with the source on its own line at the right.
+%   \begin{bookquote}{โลกของโซฟี่ หน้าที่ 22} ... \end{bookquote}
+\newenvironment{bookquote}[1]
+  {\def\bookquotesource{#1}%
+   \begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\rightmargin}{2.5em}%
+     \setlength{\listparindent}{2em}\setlength{\parsep}{0.3em}}%
+   \item\relax\linespread{\thaistretch}\selectfont\itshape}
+  {\par\nopagebreak\hfill{\upshape --- จาก \bookquotesource}\end{list}}
+
+% Personal commentary.
+%   \begin{note}[หัวข้อ] ... \end{note}
+\newenvironment{note}[1][ข้อสังเกตของผม]
+  {\par\medskip\noindent\textbf{#1}\par}
+  {\par\medskip}
+
+% ---------------------------------------------------------------
+% Links (load last)
+% ---------------------------------------------------------------
+\usepackage[hidelinks]{hyperref}
